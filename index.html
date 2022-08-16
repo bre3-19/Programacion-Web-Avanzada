@@ -1,0 +1,114 @@
+<html>
+    <head>
+    <title>
+        Canvas
+    </title>
+    <style type="text/css">
+        canvas{
+            background-color: rgb(138, 138, 209);
+        }
+    </style>
+    </head>
+
+    <body>
+        <img id="imagen" src="imagen.jpg" width="20" height="20" style="display:none">
+        <canvas id="myCanvas" width="800" height="600">
+            Hola tu navegador no funciona
+        </canvas>
+    
+        <script type="text/javascript">
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var color = "red";
+            var circulo = false;
+            /*
+            //Practica 6
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "red";
+            ctx.fillText("Hola Mundo", 10, 50);
+
+            ctx.strokeStyle = "red";
+            ctx.strokeText("Hola Mundo", 10, 80);
+
+            //Practica 7
+            var grd = ctx.createLinearGradient(200, 30, 420, 60);
+            grd.addColorStop(0, "purple");
+            grd.addColorStop(1, "yellow");
+
+            ctx.fillStyle = grd;
+            ctx.fillRect(200, 30, 300, 60);
+
+            //Practica 8
+            var grd = ctx.createRadialGradient(340, 150, 20, 340, 150, 100);
+            grd.addColorStop(0, "purple");
+            grd.addColorStop(1, "yellow");
+
+            ctx.fillStyle = grd;
+            ctx.fillRect(200, 100, 300, 120);
+            
+            ctx.fillStyle = "red";
+            ctx.fillRect(250, 220, 200, 60);
+            ctx.fillStyle = "rgba(253,221,230, 0.5)";
+            ctx.fillRect(400, 270, 150, 10);
+
+            //Practica 9
+            var img = document.getElementById("imagen");
+            ctx.drawImage(img, 10, 100);
+
+            //Practica 12
+            c.addEventListener('click', function(e) {
+                ctx.fillStyle = color;
+                ctx.strokeStyle = "black";
+                ctx.beginPath();
+                ctx.arc(e.offsetX, e.offsetY, 50, 0, 2*Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            })
+            
+
+            //Practica 13 
+            c.addEventListener('mouseover', function(e) {
+                color = generateRandomColor();
+            })
+
+            function generateRandomColor() {
+                return '#'+(0x1000000+Math.random()*0xffffff).toString(16).substr(1,6);
+            }
+            */
+
+            //Practica 14
+            
+            c.addEventListener('click', function(e) {
+                if(circulo) {
+                    ctx.fillStyle = color;
+                    ctx.strokeStyle = "black";
+                    ctx.beginPath();
+                    ctx.arc(e.offsetX, e.offsetY, 50, 0, 2*Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                    circulo = false;
+                } else {
+                    ctx.fillStyle = color;
+                    ctx.strokeStyle = "black";
+                    ctx.fillRect(e.offsetX - 25, e.offsetY - 25, 50, 50);
+                    ctx.stroke();
+                    ctx.fill();
+                    circulo = true;
+                }
+            })
+            
+            c.addEventListener('mouseover', function(e) {
+                color = getRandomRgb();
+            })
+
+            function getRandomRgb() {
+                var num = Math.round(0xffffff * Math.random());
+                var r = num >> 16;
+                var g = num >> 8 & 255;
+                var b = num & 255;
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
+            }
+            
+        </script>
+    </body>
+</html>
