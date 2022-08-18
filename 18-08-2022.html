@@ -1,0 +1,112 @@
+<html>
+    <head>
+    <title>
+        Canvas
+    </title>
+    <style type="text/css">
+        body{
+            background-color: rgb(0, 0, 0);
+        }
+        canvas{
+            background-color: rgb(71, 71, 145);
+        }
+    </style>
+    </head>
+
+    <body>
+        <canvas id="myCanvas" width="800" height="600">
+            Hola tu navegador no funciona
+        </canvas>
+    
+        <script type="text/javascript">
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var color = "red";
+            var fig = 'arc';
+            var press = false;
+            var superX = 0;
+            var superY = 0;
+
+            /*
+            //Practica 14
+            c.addEventListener('click', function(e) {
+                ctx.strokeStyle = "black";
+                ctx.fillStyle = color;
+                if(fig == 'arc') {
+                    ctx.beginPath();
+                    ctx.arc(e.offsetX, e.offsetY, 50, 0, 2*Math.PI);          
+                } else if(fig == 'rec') {
+                    ctx.rect(e.offsetX - 40, e.offsetY - 40, 80, 80)
+                    ctx.fillRect(e.offsetX - 40, e.offsetY - 40, 80, 80);
+                }  
+                ctx.stroke();
+                ctx.fill();
+            })
+            
+            c.addEventListener('mouseover', function(e) {
+                color = getRandomRgb();
+            })
+
+            c.addEventListener('mouseout', function(e) {
+                fig = (fig=='arc')?'rec':'arc';
+            })
+
+            function getRandomRgb() {
+                var num = Math.round(0xffffff * Math.random());
+                var r = num >> 16;
+                var g = num >> 8 & 255;
+                var b = num & 255;
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
+            }
+
+            //Ejercicio 15
+            c.addEventListener('mousemove', function(e) {
+                if(press) {
+                    ctx.fillStyle = 'black';
+                    ctx.fillRect(e.offsetX - 2, e.offsetY - 2, 4, 4);
+                }
+            })
+
+            //Ejercicio 16
+            c.addEventListener('mousedown', function(e) {
+                press = true;
+            });
+
+            c.addEventListener('mouseup', function(e) {
+                press = false;
+            });
+            */
+
+            //Ejercicio 17
+            document.addEventListener('keydown', function(e) {
+                if(e.keyCode == 65 || e.keyCode == 37) {
+                    //Izquierda
+                    superX -= 5;
+                }
+                if(e.keyCode == 87 || e.keyCode == 38) {
+                    //Arriba
+                    superY -= 5;
+                }
+                if(e.keyCode == 68 || e.keyCode == 39) {
+                    //Derecha
+                    superX += 5;
+                }
+                if(e.keyCode == 83 || e.keyCode == 40) {
+                    //Abajo
+                    superY += 5;
+                }
+                paint();
+            });
+
+            function paint() {
+                ctx.strokeStyle = "black";
+                ctx.fillStyle = 'rgb(71, 71, 145)';
+                ctx.fillRect(0, 0, 800, 600);
+                ctx.fillStyle = "red";
+                ctx.fillRect(superX, superY, 40, 40);
+                ctx.stroke();
+            }
+            
+        </script>
+    </body>
+</html>
