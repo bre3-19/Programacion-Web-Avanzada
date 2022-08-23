@@ -1,0 +1,88 @@
+<html>
+    <head>
+    <title>
+        Canvas
+    </title>
+    <style type="text/css">
+        canvas{
+            background-color: rgb(138, 138, 209);
+        }
+    </style>
+    </head>
+
+    <body>
+        <img id="imagen" src="imagen.jpg" width="20" height="20" style="display:none">
+        <canvas id="myCanvas" width="800" height="600">
+            Hola tu navegador no funciona
+        </canvas>
+    
+        <script type="text/javascript">
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var color = "red";
+            var fig = 'arc';
+            var press = false;
+            var superX = 0;
+            var superY = 0;
+
+            function run() {
+                c = document.getElementById("myCanvas");
+                ctx = c.getContext("2d");
+
+                paint();
+            } 
+
+            function paint() {
+                window.requestAnimationFrame(paint)
+
+                ctx.strokeStyle = "black";
+                ctx.fillStyle = 'rgb(71, 71, 145)';
+                ctx.fillRect(0, 0, 800, 600);
+                ctx.fillStyle = "red";
+                ctx.fillRect(superX, superY, 40, 40);
+                ctx.stroke();
+            }
+
+            window.requestAnimationFrame = (function () {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 17);
+                    };
+            }());
+
+            window.addEventListener('load', run, false);
+            
+            document.addEventListener('keydown', function(e) {
+                if(e.keyCode == 65 || e.keyCode == 37) {
+                    //Izquierda
+                    superX -= 5;
+                    if(superX < 0)
+                        superX = 800;
+                }
+                if(e.keyCode == 87 || e.keyCode == 38) {
+                    //Arriba
+                    superY -= 5;
+                    if(superY < 0)
+                        superY = 600;
+                }
+                if(e.keyCode == 68 || e.keyCode == 39) {
+                    //Derecha
+                    superX += 5;
+                    if(superX > 800)
+                        superX = 0;
+                }
+                if(e.keyCode == 83 || e.keyCode == 40) {
+                    //Abajo
+                    superY += 5;
+                    if(superY > 600)
+                        superY = 0;
+                }
+
+                paint();
+            });
+
+        </script>
+    </body>
+</html>
