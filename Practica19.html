@@ -1,0 +1,208 @@
+<html>
+    <head>
+    <title>
+        Canvas
+    </title>
+    <style type="text/css">
+        canvas{
+            background-color: rgb(138, 138, 209);
+        }
+    </style>
+    </head>
+
+    <body>
+        <canvas id="myCanvas" width="800" height="500">
+            Hola tu navegador no funciona
+        </canvas>
+
+        <script type="text/javascript">
+            var cv = document.getElementById('myCanvas');
+            var ctx = cv.getContext('2d');
+            var my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
+            my_gradient.addColorStop(0, "rgb(65, 40, 160)");
+            my_gradient.addColorStop(1, "black");
+            ctx.fillStyle = my_gradient;
+            ctx.fillRect(0, 0, 800, 600);
+            
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(60, 35, 150)";
+            ctx.beginPath();
+            ctx.moveTo(400, 290);
+            ctx.lineTo(490, 290);
+            ctx.lineTo(445, 230);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(100, 75, 150)";
+            ctx.beginPath();
+            ctx.moveTo(450, 290);
+            ctx.lineTo(320, 290);
+            ctx.lineTo(385, 180);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(60, 35, 150)";
+            ctx.beginPath();
+            ctx.moveTo(400, 290);
+            ctx.lineTo(150, 290);
+            ctx.lineTo(275, 100);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(100, 75, 150)";
+            ctx.beginPath();
+            ctx.moveTo(360, 290);
+            ctx.lineTo(110, 290);
+            ctx.lineTo(235, 80);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(60, 35, 150)";
+            ctx.beginPath();
+            ctx.moveTo(320, 290);
+            ctx.lineTo(70, 290);
+            ctx.lineTo(195, 100);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(20, 10, 70)";
+            ctx.beginPath();
+            ctx.moveTo(320, 350);
+            ctx.lineTo(70, 350);
+            ctx.lineTo(195, 160);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(20, 10, 70)";
+            ctx.beginPath();
+            ctx.moveTo(200, 350);
+            ctx.lineTo(-300, 350);
+            ctx.lineTo(-100, 60);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(120, 110, 170)";
+            ctx.beginPath();
+            ctx.moveTo(300, 400);
+            ctx.lineTo(-100, 400);
+            ctx.lineTo(100, 250);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(120, 110, 170)";
+            ctx.beginPath();
+            ctx.moveTo(600, 400);
+            ctx.lineTo(900, 400);
+            ctx.lineTo(750, 200);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(65, 40, 160)";
+            ctx.fillStyle = "rgb(50, 50, 50)";
+            ctx.beginPath();
+            ctx.moveTo(0, 400);
+            ctx.lineTo(800, 400);
+            ctx.lineTo(800, 420);
+            ctx.lineTo(0, 420);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgb(240, 240, 240)";
+            ctx.fillStyle = "rgb(200, 200, 200)";
+            ctx.beginPath();
+            ctx.moveTo(0, 420);
+            ctx.lineTo(800, 420);
+            ctx.lineTo(800, 500);
+            ctx.lineTo(0, 500);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgba(130, 185, 150, 0.9)";
+            ctx.fillStyle = "rgba(130, 185, 150, 0.9)";
+            ctx.beginPath();
+            ctx.moveTo(234, 350);
+            ctx.lineTo(300, 400);
+            ctx.lineTo(320, 350);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgba(140, 200, 150, 0.9)";
+            ctx.fillStyle = "rgba(140, 200, 150, 0.9)";
+            ctx.beginPath();
+            ctx.moveTo(300, 400);
+            ctx.lineTo(320, 350);
+            ctx.lineTo(600, 400);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgba(140, 190, 210, 0.9)";
+            ctx.fillStyle = "rgba(140, 190, 210, 0.9)";
+            ctx.beginPath();
+            ctx.moveTo(320, 350);
+            ctx.lineTo(280, 290);
+            ctx.lineTo(682, 290);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.strokeStyle = "rgba(130, 180, 200, 0.9)";
+            ctx.fillStyle = "rgba(130, 180, 200, 0.9)";
+            ctx.beginPath();
+            ctx.moveTo(320, 350);
+            ctx.lineTo(600, 400);
+            ctx.lineTo(682, 290);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.fillStyle = "rgb(200, 200, 200)";
+            ctx.strokeStyle = "rgb(255, 255, 255)";
+            ctx.beginPath();
+            ctx.arc(605, 60, 50, 0, 2*Math.PI);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.fillStyle = "rgba(130, 180, 200, 0.6)";
+            ctx.strokeStyle = "rgb(130, 180, 200)";
+            ctx.beginPath();
+            ctx.arc(600, 65, 50, 0, 2*Math.PI);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+
+            function getCursorPosition(canvas, event) {
+                const rect = canvas.getBoundingClientRect()
+                const x = event.clientX - rect.left
+                const y = event.clientY - rect.top
+                console.log("x: " + x + " y: " + y)
+            }
+
+            const canvas = document.querySelector('canvas')
+            canvas.addEventListener('mousedown', function(e) {
+                getCursorPosition(canvas, e)
+            })
+        </script>
+    </body>
+</html>
