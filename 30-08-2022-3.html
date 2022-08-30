@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Vue js </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+
+    <script src="https://unpkg.com/vue@3"> </script>
+    
+    <body>
+        <div id="contenedor">
+            <h1> {{ name }}</h1>
+            <h2> {{ lastname }} </h2>
+            <input type="text" v-model="name" name="">
+            <button @Click="saludar">Click</button>
+            <hr>
+
+            <ol>
+                <li v-for="item in chamacos">
+                    {{ item.name }} : <span> {{ item.role }} </span>
+                </li>
+            </ol>
+            <input type="text" v-model="nombre" nombre=""> <br>
+            <input type="text" v-model="rol" rol=""> <br>
+            <button @Click="save">Click</button>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    name:'Bruno Alejandro',
+                    lastname:'Encarnación Varo',
+                    num1:0,
+                    num2:0,
+                    suma:0,
+                    year:0,
+                    chamacos: [{name: 'Iran', role: 'front'}, {name: 'Duran', role: 'backend'}, {name: 'Buenrostro', role: 'movil'}],
+                    nombre: 0,
+                    rol: 0
+                }
+            },
+            methods: {
+                saludar() {
+                    alert('hola ' + this.name)
+                },
+                save() {
+                    this.chamacos.push({name: this.nombre, role: this.rol})
+                }
+            }
+        }).mount('#contenedor')
+
+    </script>
+</html>
