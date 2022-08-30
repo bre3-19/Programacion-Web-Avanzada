@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Vue js </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+
+    <script src="https://unpkg.com/vue@3"> </script>
+    
+    <body>
+        <div id="contenedor">
+            <h1> {{ name }}</h1>
+            <h2> {{ lastname }} </h2>
+            <input type="text" v-model="name" name="">
+            <button @Click="saludar">Click</button>
+            <hr>
+            <input type="text" v-model="num1" num1=""> <br>
+            <input type="text" v-model="num2" num2="">
+            <h3> {{ suma }} </h3>
+            <button @Click="sumar">Click</button>
+            <hr>
+            <input type="text" v-model="year" name ="">
+            <h1 v-if="year >= 18">
+                Pase
+            </h1>
+            <h1 v-else>
+                No Pase
+            </h1>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    name:'Bruno Alejandro',
+                    lastname:'Encarnación Varo',
+                    num1:0,
+                    num2:0,
+                    suma:0,
+                    year:0
+                }
+            },
+            methods: {
+                saludar() {
+                    alert('hola ' + this.name)
+                },
+                sumar() {
+                    suma = (this.num1 + this.num2)
+                }
+            }
+        }).mount('#contenedor')
+
+    </script>
+</html>
