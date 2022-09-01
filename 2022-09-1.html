@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title> Vue js </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+
+    <script src="https://unpkg.com/vue@3"> </script>
+    
+    <body>
+        <div id="contenedor">
+            <form>
+                <fieldset>
+                    <legend>
+                        Acceso al panel
+                    </legend>
+                    <label>
+                        Correo electrónico
+                    </label>
+                    <input type="email" v-model="email" name="">
+
+                    <label>
+                        Password
+                    </label>
+                    <input type="password" v-model="password" name="">
+
+                    <button @click="login">
+                        Acceder
+                    </button>
+
+                </fieldset>
+            </form>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        const { createApp } = Vue;
+
+        const data = null;
+        const error = null;
+
+        const app = createApp({
+            data() {
+                return {
+                    users:[],
+                    email: '',
+                    password: ''
+                }
+            },
+            methods: {
+                login(e) {
+                    e.preventDefault();
+
+                    //TAREA
+                    //Mostrar tabla con los datos de los usuarios
+                    //Formulario para meter un usario al json
+                    //Formulario oara editar
+
+                    var access = this.users.map((u) => {
+                        if(this.email === u.email.toLowerCase() ) {
+                            if( this.password === u.password ) {
+                                alert("datos correctos");
+                            } 
+                            alert("datos incorrectos");
+                        }
+                    })
+                    console.log(access)
+                }
+            },
+            mounted() {
+                fetch('users.json')
+                 .then((res) => res.json())
+                 .then((json) => ( this.users = json ))
+                 .then((err) => ( console.log(err)) )
+            }
+        }).mount('#contenedor')
+
+    </script>
+</html>
