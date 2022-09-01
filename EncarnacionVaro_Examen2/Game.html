@@ -1,0 +1,729 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>
+        Canvas
+    </title>
+    <style type="text/css">
+        body {
+            overflow: hidden; /* Hide scrollbars */
+            background-color: rgb(110, 85, 50);
+        }
+        canvas{
+            background-color: rgb(138, 138, 209);
+        }
+    </style>
+    </head>
+
+    <body> 
+        <canvas id="myCanvas" width="1520" height="760">
+            Hola tu navegador no funciona
+        </canvas>
+    
+        <script type="text/javascript">
+            //Canvas 1160 original
+            //Variables y tamaño de Canvas
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            const w = 1160;
+            const h = 760;
+
+            //Sonidos
+            var myMusic;
+            var playerDeath;
+            var wallBreak;
+            var bombExplode;
+            var wallBounce;
+
+            //Spritesheet del jugador
+            const playerSprite = new Image();
+            playerSprite.src = "image/playerSprites.png";
+
+            //Background del mapa
+            const background = new Image();
+            background.src = "image/background.jpg";
+            
+            //Obstaculos del mapa
+            const scrap1 = new Image();
+            scrap1.src = 'image/scrap1.png';
+            const scrap2 = new Image();
+            scrap2.src = 'image/scrap2.png';
+            const scrap3 = new Image();
+            scrap3.src = 'image/scrap3.png';
+            const scrap4 = new Image();
+            scrap4.src = 'image/scrap4.png';
+
+            //Limites del mapa
+            const sideLimit = new Image();
+            sideLimit.src = 'image/limitSide.png';
+            const upperLimit = new Image();
+            upperLimit .src = 'image/limitUpper.png';
+            const lowerLimit = new Image();
+            lowerLimit .src = 'image/limitLower.png';
+            
+            //Pilares del mapa
+            const pillar = new Image();
+            pillar.src = 'image/pillar.png';
+
+            //Mina del jugador
+            const mineBomb = new Image();
+            mineBomb.src = 'image/mineBomb.png';
+            const upBoom = new Image();
+            upBoom.src = 'image/boomUp.png';
+            const dnBoom = new Image();
+            dnBoom.src = 'image/boomDn.png';
+            const lfBoom = new Image();
+            lfBoom.src = 'image/boomLf.png';
+            const rgBoom = new Image();
+            rgBoom.src = 'image/boomRg.png';
+
+            //Estadisticas
+            const dataUI = new Image();
+            dataUI.src = 'image/dataUI.png';
+            const startTime = new Date();
+            var endTime = null;
+
+            //Variables del mapa
+            const wid = 8;
+            const len = 13;
+            var map = new Array(wid);
+            var wall = null;
+            var limit = null;
+            var obstacle = new Array(0);
+            var obs = null;
+
+            //Variables del jugador
+            var player = null;
+            var color = "red";
+            var dir = "right";
+            const speed = 3;
+            var facing = 0;
+            var frameX = 0;
+            var moving = false;
+
+            //Variables de la bomba
+            var bomb = null;
+            var bombs = null;
+            var boomUp = null;
+            var boomDn = null;
+            var boomLf = null;
+            var boomRg = null;
+
+            //Estadisticas
+            var start;
+            var end;
+            var points = 0;
+
+            window.requestAnimationFrame = (function () {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 17);
+                    };
+            }());
+
+            window.addEventListener('load', run, false);
+
+            //Clase Jugador
+            function playerDraw(x, y, w, h, frameX, frameY, moving, alive) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.frameX = frameX;
+                this.frameY = frameY;
+                this.moving = moving;
+                this.alive = alive;
+            }
+
+            //Clase Tile
+            function Tile(x, y, w, h, alive, state) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.alive = alive;
+                this.state = state;
+
+                this.intersects = function(target) {
+                    if(this.x < target.x + target.w &&
+                    this.x + this.w > target.x && 
+                    this.y < target.y + target.h && 
+                    this.y + this.h > target.y){
+                        return true;	
+                    } 
+                };
+
+                this.paint = function(ctx) {
+                    ctx.fillStyle = this.c;
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeRect(this.x, this.y, this.w, this.h);
+                }
+            }
+
+            //Clase Objeto
+            function Obj(x, y, w, h, c, alive) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.c = c;
+                this.alive = alive;
+
+                this.intersects = function(target) {
+                    if(this.x < target.x + target.w &&
+                    this.x + this.w > target.x && 
+                    this.y < target.y + target.h && 
+                    this.y + this.h > target.y){
+                        return true;	
+                    } 
+                };
+
+                this.paint = function(ctx) {
+                    ctx.fillStyle = this.c;
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    ctx.strokeRect(this.x, this.y, this.w, this.h);
+                }
+            }
+            
+            //Inicializacion del juego
+            function run() {
+                c = document.getElementById("myCanvas");
+                ctx = c.getContext("2d");
+
+                //Sonidos
+                myMusic = new sound('sound/gametheme.mp3');
+                myMusic.play();
+                playerDeath = new sound('sound/death.mp3');
+                bombExplode = new sound('sound/explosion.mp3');
+                wallBreak = new sound('sound/break.mp3');
+                wallBounce = new sound('sound/bounce.mp3');
+
+                //UI para estadisticas
+                drawSprite(dataUI, 0, 0, 360, 760, 1160, 0, 360, 760);
+
+                //Inicializacion del personaje
+                player = new Obj(54, 54, 28, 28, "black", 1);
+
+                //Inicializacion del mapa
+                for(var i = 0; i < len; i++) {
+                    map[i] = new Array(wid);
+                }
+                for(var i = 0; i < len; i++) {
+                    for(var j = 0; j < wid; j++) {
+                        wall = new Obj(80 + (40 * i) * 2, 80 + (40 * j) * 2, 40, 40, "red", 0);
+                        map[i][j] = wall;
+                    }
+                }
+
+                //Llenado de obstaculos
+                //Fila 1
+                for(var i = 0; i < 22; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(240 + (40 * i), 40, 40, 40, 1, state));
+                }
+                //Fila 2
+                for(var i = 0; i < 11; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(280 + ((40 * i) * 2), 80, 40, 40, 1, state));
+                }
+                //Fila 3
+                for(var i = 0; i < 22; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(240 + (40 * i), 120, 40, 40, 1, state));
+                }
+                //Fila 4
+                for(var i = 0; i < 11; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(280 + ((40 * i) * 2), 160, 40, 40, 1, state));
+                }
+                //Fila 5
+                for(var i = 0; i < 22; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(240 + (40 * i), 200, 40, 40, 1, state));
+                }
+                //Fila 6
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 240, 40, 40, 1, state));
+                }
+                //Fila 7
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 280, 40, 40, 1, state));
+                }
+                //Fila 8
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 320, 40, 40, 1, state));
+                }
+                //Fila 9
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 360, 40, 40, 1, state));
+                }
+                //Fila 10
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 400, 40, 40, 1, state));
+                }
+                //Fila 11
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 440, 40, 40, 1, state));
+                }
+                //Fila 12
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 480, 40, 40, 1, state));
+                }
+                //Fila 13
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 520, 40, 40, 1, state));
+                }
+                //Fila 14
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 560, 40, 40, 1, state));
+                }
+                //Fila 15
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 600, 40, 40, 1, state));
+                }
+                //Fila 16
+                for(var i = 0; i < 14; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + ((40 * i) * 2), 640, 40, 40, 1, state));
+                }
+                //Fila 17
+                for(var i = 0; i < 27; i++) {
+                    var state = Math.floor(Math.random() * 4);
+                    obstacle.push(new Tile(40 + (40 * i), 680, 40, 40, 1, state));
+                }
+
+                //Limites del mapa
+                limit = new Array(4);
+                limit[0] = new Obj(0, 0, 1160, 40, "red", 0);
+                limit[1] = new Obj(0, 760 - 40, 1160, 40, "red", 0);
+                limit[2] = new Obj(0, 0, 40, 760, "red", 0);
+                limit[3] = new Obj(1160 - 40, 0, 40, 760, "red", 0);
+                paint();
+            }
+
+            //Función para animar al jugador
+            function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+                ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+            }
+
+            //Funcion para pintar y animar
+            function paint() {
+                window.requestAnimationFrame(paint)
+                
+                //Timepo
+                endTime = new Date();
+                ctx.fillStyle = "black";
+                ctx.fillRect(1240, 605, 195, 50);
+                ctx.fillRect(1195, 405, 295, 50);
+
+                ctx.fillStyle = "white";
+                ctx.font = "54px Arial";
+                ctx.fillText((getTime(startTime, endTime)), 1265, 650);
+
+                ctx.font = "36px Arial";
+                ctx.fillText('Puntuación: ' + points, 1205, 440);
+
+                //Puntos
+
+                //Dibujar el fondo
+                ctx.drawImage(background, 0, 0, w, h);
+
+                //Si existe una bomba, dibujarla
+                if(bombs != null) {
+                    if(bombs.alive == 1) {
+                        drawSprite(mineBomb, 0, 0, 40, 40, bombs.x - 10, bombs.y, 40, 40);
+                    }
+                }
+
+                //Pintar al jugador
+                drawSprite(playerSprite, (40 * frameX), (40 * facing), 40, 40, player.x - (player.w / 4), player.y , 40, 40);
+
+                //Dibujar las explosiones
+                if(boomDn != null) {
+                    drawSprite(dnBoom, 0, 0, 20, 30, boomDn.x, boomDn.y, 20, 30);
+                }
+                if(boomUp != null) {
+                    drawSprite(upBoom, 0, 0, 20, 30, boomUp.x, boomUp.y, 20, 30);
+                }
+                if(boomLf != null) {
+                    drawSprite(lfBoom, 0, 0, 30, 20, boomLf.x, boomLf.y, 30, 20);
+                }
+                if(boomRg != null) {
+                    drawSprite(rgBoom, 0, 0, 30, 20, boomRg.x, boomRg.y, 30, 20);
+                }
+
+                //Pintado de mapa
+                for(var i = 0; i < len; i++) {
+                    for(var j = 0; j < wid; j++) {
+                        drawSprite(pillar, 0, 0, 40, 40, map[i][j].x, map[i][j].y, 40, 40);
+                        
+                    }
+                }
+                
+                drawSprite(upperLimit, 0, 0, 1160, 40, limit[0].x, limit[0].y, 1160, 40);
+                drawSprite(lowerLimit, 0, 0, 1160, 40, limit[1].x, limit[1].y, 1160, 40);
+                drawSprite(sideLimit, 0, 0, 40, 760, limit[2].x, limit[2].y, 40, 760);
+                drawSprite(sideLimit, 0, 0, 40, 760, limit[3].x, limit[3].y, 40, 760);
+                
+
+                for(var i = 0; i < obstacle.length; i++) {
+                    if(obstacle[i].alive == 1) {
+                        switch(obstacle[i].state) {
+                            case 0:
+                                drawSprite(scrap1, 0, 0, 40, 40, obstacle[i].x, obstacle[i].y, 40, 40); break;
+                            case 1:
+                                drawSprite(scrap2, 0, 0, 40, 40, obstacle[i].x, obstacle[i].y, 40, 40); break;
+                            case 2:
+                                drawSprite(scrap3, 0, 0, 40, 40, obstacle[i].x, obstacle[i].y, 40, 40); break;
+                            case 3:
+                                drawSprite(scrap4, 0, 0, 40, 40, obstacle[i].x, obstacle[i].y, 40, 40); break;
+                        }
+                    }
+                }
+
+                //Correr el juego
+                update()
+            }
+
+            //Ciclo del juego
+            function update() {
+
+                //Controles
+                movement();
+            }
+
+            //Detectar si no se esta moviendo
+            window.addEventListener('keyup', function(e){
+                moving = false;
+            });
+            
+            //Movimiento del jugador
+            function movement() {
+                document.onkeydown = detectKey;
+
+                function detectKey(e) {
+                    e = e || window.event;
+                    if (e.keyCode == '32') {
+                        if(bombs == null) {
+                            setBomb(player.x, player.y);
+                        }
+                    }
+                    else if (e.keyCode == '38' || e.keyCode == '87') {
+                        player.y -= speed;
+                        dir = "up";
+                        facing = 0;
+                        moving = true;
+                    }
+                    else if (e.keyCode == '40' || e.keyCode == '83') {
+                        player.y += speed;
+                        dir = "down";
+                        facing = 1;
+                        moving = true;
+                    }
+                    else if (e.keyCode == '37' || e.keyCode == '65') {
+                        player.x -= speed;
+                        dir = "left";
+                        facing = 2;
+                        moving = true;
+                    }
+                    else if (e.keyCode == '39' || e.keyCode == '68') {
+                        player.x += speed;
+                        dir = "right";
+                        facing = 3;
+                        moving = true;
+                    }
+                }
+
+                //Colision del jugador
+                playerCollision();
+                handlePlayerFrame();
+            }
+
+            //Colision del jugador
+            function playerCollision() {
+
+                //Colision con los muros
+                for(var i = 0; i < len; i++) {
+                    for(var j = 0; j < wid; j++) {
+                        //map[i][j].paint(ctx);
+                        if(player.intersects(map[i][j])) {
+                            if(dir == "left") {
+                                player.x += speed;
+                            }
+
+                            else if(dir == "up") {
+                                player.y += speed;
+                            }
+
+                            else if(dir == "right") {
+                                player.x -= speed;
+                            }
+
+                            else if(dir == "down") {
+                                player.y -= speed;
+                            }
+                        }
+                    }
+                }
+
+                //Colision con los limites del mapa
+                for(var i = 0; i < 4; i++) {
+                    //limit[i].paint(ctx);
+                    if(player.intersects(limit[i])) {
+                        if(dir == "left") {
+                            player.x += speed;
+                        }
+
+                        else if(dir == "up") {
+                            player.y += speed;
+                        }
+
+                        else if(dir == "right") {
+                            player.x -= speed;
+                        }
+
+                        else if(dir == "down") {
+                            player.y -= speed;
+                        }
+                    }
+                }
+
+                //Colision con los obstaculos
+                for(var i = 0; i < obstacle.length; i++) {
+                    if(player.intersects(obstacle[i]) && obstacle[i].alive == 1) {
+                        if(dir == "left") {
+                            player.x += speed;
+                        }
+
+                        else if(dir == "up") {
+                            player.y += speed;
+                        }
+
+                        else if(dir == "right") {
+                            player.x -= speed;
+                        }
+
+                        else if(dir == "down") {
+                            player.y -= speed;
+                        }
+                    }
+                }
+            }
+            
+            //Animar el movimiento
+            function handlePlayerFrame() {
+                if(frameX < 9 && moving) {
+                    frameX++;
+                } else
+                frameX = 0;
+            }
+
+            //Muerte del jugador
+            function killPlayer() {
+                player.alive = false;
+            }
+
+            //Poner bomba
+            function setBomb(x, y) {
+                bomb = new Obj(x, y, 10, 10, "white", 1);
+                bomb.alive = 1;
+                bombs = bomb;
+
+                setTimeout(function() { 
+                    explodeBomb(bomb.x, bomb.y); 
+                }, 3000);
+            }
+
+            //Explotar la bomba
+            function explodeBomb(x, y) {
+                bombs = null;
+                bombExplode.play();
+                boomDn = new Obj(x, y + 10, 20, 30, "green", 1);
+                boomUp = new Obj(x, y + 10, 20, 30, "green", 1);
+                boomRg = new Obj(x, y + 10, 30, 20, "green", 1);
+                boomLf = new Obj(x, y + 10, 30, 20, "green", 1);
+
+                //Lanzar proyectiles hacia los 4 lados
+                for(var i = 0; i < 16; i++){
+                    boomPath(i);
+                }
+            }
+
+            //Camino de los proyectiles
+            function boomPath(dist) {
+                setTimeout(function() { 
+                    if(dist < 15) {
+                        //En caso de existir
+                        if(boomDn != null) {
+                            boomDn.y += dist;
+
+                            //Calcular colision con los obstaculos
+                            for(var i = 0; i < obstacle.length; i++) {
+                                if(boomDn.intersects(obstacle[i]) && obstacle[i].alive == 1) {
+                                    boomDn = null;
+                                    obstacle[i].alive = 0;
+                                    wallBreak.play();
+                                    points += 10;
+                                }
+                            }
+
+                            //Calcular colision con el mapa
+                            for(var i = 0; i < len; i++) {
+                                for(var j = 0; j < wid; j++) {
+                                    if(boomDn.intersects(map[i][j])) {
+                                        boomDn = null;
+                                        wallBounce.play();
+                                    }
+                                }
+                            }
+
+                            //Calcular colision con los limites
+                            for(var i = 0; i < 4; i++) {
+                                if(boomDn.intersects(limit[i])) {
+                                    boomDn = null;
+                                    wallBounce.play();
+                                }
+                            }
+                        }
+
+                        if(boomUp != null) {
+                            boomUp.y -= dist;
+                            for(var i = 0; i < obstacle.length; i++) {
+                                if(boomUp.intersects(obstacle[i]) && obstacle[i].alive == 1) {
+                                    boomUp = null;
+                                    obstacle[i].alive = 0;
+                                    wallBreak.play();
+                                    points += 10;
+                                }
+                            }
+                            for(var i = 0; i < len; i++) {
+                                for(var j = 0; j < wid; j++) {
+                                    if(boomUp.intersects(map[i][j])) {
+                                        boomUp = null;
+                                        wallBounce.play();
+                                    }
+                                }
+                            }
+                            for(var i = 0; i < 4; i++) {
+                                if(boomUp.intersects(limit[i])) {
+                                    boomUp = null;
+                                    wallBounce.play();
+                                }
+                            }
+                        }
+
+                        if(boomRg != null) {
+                            boomRg.x += dist;
+                            for(var i = 0; i < obstacle.length; i++) {
+                                if(boomRg.intersects(obstacle[i]) && obstacle[i].alive == 1) {
+                                    boomRg = null;
+                                    obstacle[i].alive = 0;
+                                    wallBreak.play();
+                                    points += 10;
+                                }
+                            }
+                            for(var i = 0; i < len; i++) {
+                                for(var j = 0; j < wid; j++) {
+                                    if(boomRg.intersects(map[i][j])) {
+                                        boomRg = null;
+                                        wallBounce.play();
+                                    }
+                                }
+                            }
+                            for(var i = 0; i < 4; i++) {
+                                if(boomRg.intersects(limit[i])) {
+                                    boomRg = null;
+                                    wallBounce.play();
+                                }
+                            }
+                        }
+
+                        if(boomLf != null) {
+                            boomLf.x -= dist;
+                            for(var i = 0; i < obstacle.length; i++) {
+                                if(boomLf.intersects(obstacle[i]) && obstacle[i].alive == 1) {
+                                    boomLf = null;
+                                    obstacle[i].alive = 0;
+                                    wallBreak.play();
+                                    points += 10;
+                                }
+                            }
+                            for(var i = 0; i < len; i++) {
+                                for(var j = 0; j < wid; j++) {
+                                    if(boomLf.intersects(map[i][j])) {
+                                        boomLf = null;
+                                        wallBounce.play();
+                                    }
+                                }
+                            }
+                            for(var i = 0; i < 4; i++) {
+                                if(boomLf.intersects(limit[i])) {
+                                    boomLf = null;
+                                    wallBounce.play();
+                                }
+                            }
+                        }
+                        
+                    } else
+                        clearPath();
+                }, 50 * dist);
+            }
+
+            //Borrar proyectiles en caso de no chocar con nada
+            function clearPath() {
+                boomDn = null;
+                boomUp = null;
+                boomRg = null;
+                boomLf = null;
+            }
+
+            //Mostar tiempo
+            function getTime(start, end) {
+                var timeElapsed = end - start;
+                timeElapsed /= 1000;
+                var seconds = Math.round(timeElapsed % 60);
+                timeElapsed = Math.floor(timeElapsed / 60);
+                var minutes = Math.round(timeElapsed % 60);
+                if(seconds < 10) {
+                    seconds = '0' + seconds;
+                }
+                if(minutes < 10) {
+                    minutes = '0' + minutes;
+                }
+                return totalTime = minutes + ":" + seconds;
+            }
+
+            //Función para reproducir música
+            function sound(src) {
+                this.sound = document.createElement("audio");
+                this.sound.src = src;
+                this.sound.setAttribute("preload", "auto");
+                this.sound.setAttribute("controls", "none");
+                this.sound.style.display = "none";
+                document.body.appendChild(this.sound);
+                this.play = function(){
+                    this.sound.play();
+                }
+                this.stop = function(){
+                    this.sound.pause();
+                }
+            }
+
+            document.body.addEventListener("mousemove", function () {
+                myMusic.play()
+            })
+        </script>
+    </body>
+</html>
