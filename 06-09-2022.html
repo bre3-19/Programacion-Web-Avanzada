@@ -1,0 +1,275 @@
+<html>
+    <head>
+        <title> Vue js </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+
+    <script src="https://unpkg.com/vue@3"> </script>
+
+    <style>
+        #feedback-form {
+            width: 280px;
+            margin: 0 auto;
+            background-color: #fcfcfc;
+            padding: 20px 50px 40px;
+            box-shadow: 1px 4px 10px 1px #aaa;
+            font-family: sans-serif;
+        }
+
+        #feedback-form * {
+            box-sizing: border-box;
+        }
+
+        #feedback-form h2{
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #feedback-form input {
+            margin-bottom: 15px;
+        }
+
+        #feedback-form input[type=text] {
+            display: block;
+            height: 32px;
+            padding: 6px 16px;
+            width: 100%;
+            border: none;
+            background-color: #f3f3f3;
+        }
+
+        #feedback-form input[type=email] {
+            display: block;
+            height: 32px;
+            padding: 6px 16px;
+            width: 100%;
+            border: none;
+            background-color: #f3f3f3;
+        }
+
+        #feedback-form input[type=password] {
+            display: block;
+            height: 32px;
+            padding: 6px 16px;
+            width: 100%;
+            border: none;
+            background-color: #f3f3f3;
+        }
+
+        #feedback-form label {
+            color: #777;
+            font-size: 0.8em;
+        }
+
+        #feedback-form input[type=checkbox] {
+            float: left;
+        }
+
+        #feedback-form input:not(:checked) + #feedback-phone {
+            height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        #feedback-form #feedback-phone {
+            transition: .3s;
+        }
+
+        #feedback-form button {
+            display: block;
+            margin: 20px auto 0;
+            width: 150px;
+            height: 40px;
+            border-radius: 25px;
+            border: none;
+            color: #eee;
+            cursor:pointer;
+            font-weight: 700;
+            box-shadow: 1px 4px 10px 1px #aaa;
+            
+            background: #207cca; /* Old browsers */
+            background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
+        }
+
+        body {
+            color: #444;
+            font: 100%/30px 'Helvetica Neue', helvetica, arial, sans-serif;
+            text-shadow: 0 1px 0 #fff;
+        }
+
+        strong {
+            font-weight: bold; 
+        }
+
+        em {
+            font-style: italic; 
+        }
+
+        table {
+            background: #f5f5f5;
+            border-collapse: separate;
+            box-shadow: inset 0 1px 0 #fff;
+            font-size: 12px;
+            line-height: 24px;
+            margin: 30px auto;
+            text-align: left;
+            width: 800px;
+        }	
+
+        th {
+            background: linear-gradient(#777, #444);
+            border-left: 1px solid #555;
+            border-right: 1px solid #777;
+            border-top: 1px solid #555;
+            border-bottom: 1px solid #333;
+            box-shadow: inset 0 1px 0 #999;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px 15px;
+            position: relative;
+            text-shadow: 0 1px 0 #000;	
+        }
+
+        th:after {
+            background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.08));
+            content: '';
+            display: block;
+            height: 25%;
+            left: 0;
+            margin: 1px 0 0 0;
+            position: absolute;
+            top: 25%;
+            width: 100%;
+        }
+
+        th:first-child {
+            border-left: 1px solid #777;	
+            box-shadow: inset 1px 1px 0 #999;
+        }
+
+        th:last-child {
+            box-shadow: inset -1px 1px 0 #999;
+        }
+
+        td {
+            border-right: 1px solid #fff;
+            border-left: 1px solid #e8e8e8;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #e8e8e8;
+            padding: 10px 15px;
+            position: relative;
+            transition: all 300ms;
+        }
+
+        td:first-child {
+            box-shadow: inset 1px 0 0 #fff;
+        }	
+
+        td:last-child {
+            border-right: 1px solid #e8e8e8;
+            box-shadow: inset -1px 0 0 #fff;
+        }	
+
+        tr:last-of-type td {
+            box-shadow: inset 0 -1px 0 #fff; 
+        }
+
+        tr:last-of-type td:first-child {
+            box-shadow: inset 1px -1px 0 #fff;
+        }	
+
+        tr:last-of-type td:last-child {
+            box-shadow: inset -1px -1px 0 #fff;
+        }	
+
+        tbody:hover td {
+            color: transparent;
+            text-shadow: 0 0 3px #aaa;
+        }
+
+        tbody:hover tr:hover td {
+            color: #444;
+            text-shadow: 0 1px 0 #fff;
+        }
+    </style>
+    
+    <body>
+        <div id="contenedor" class="form">
+            <table class="responsive-table table">
+                      <thead>
+                          <tr>
+                              <th class="sortable"> ID </th>
+                              <th> Nombre </th>
+                              <th> Usuario </th>
+                              <th> E-mail </th>
+                          </tr>
+                      </thead>
+                      <tr v-for="user in users">
+                          <td>{{ user.id }} </td>
+                          <td>{{ user.name }}</td>
+                          <td>{{ user.username }}</td>
+                          <td>{{ user.email }}</td>
+                      </tr>
+                  </table>
+
+                  <div id="feedback-form">
+                    <form>
+                        <h2 class="header">Iniciar sesión</h2>
+                        <input type="email" v-model="email" placeholder="Email" name="">
+                        <input type="password" v-model="password" placeholder="Contraseña" name="">
+
+                        <button @click="login">
+                            Acceder
+                        </button>
+                    </form>
+                </div>
+          </div>
+
+    <script type="text/javascript">
+        const { createApp } = Vue;
+
+        const data = null;
+        const error = null;
+
+        const app = createApp({
+            data() {
+                return {
+                    id:'',
+                    users:[],
+                    username:'',
+                    email: '',
+                    password: ''
+                }
+            },
+            methods: {
+                login(e) {
+                    e.preventDefault();
+
+                    var access = this.users.map((u) => {
+                        if(this.email === u.email.toLowerCase() ) {
+                            if( this.password == u.password ) {
+                                sessionStorage.setItem('user', this.email);
+                                sessionStorage.setItem('pass', this.password);
+                                if(sessionStorage.getItem('user') === null) {
+                                    alert("Sesión iniciada");
+                                }
+                            } else {
+                                alert("datos incorrectos");
+                            }
+                        }
+                    })
+                    console.log(access)
+                }
+            },
+            mounted() {
+                fetch('users.json')
+                 .then((res) => res.json())
+                 .then((json) => ( this.users = json ))
+                 .then((err) => ( console.log(err)) )
+            }
+        }).mount('#contenedor')
+    </script>
+</html>
