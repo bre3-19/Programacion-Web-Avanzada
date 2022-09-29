@@ -1,8 +1,12 @@
 <html lang="en" dir="ltr">
     <head>
         <?php include  "./../layouts/head.template.php"; ?>
+        <?php include "../app/AuthController.php"; ?>
     </head>
     <body>
+        <?php session_start();
+        $prodController = new AuthController();
+        $prods = $prodController->getProducts(); ?>
 
         <!-- navbar -->
         <?php include "./../layouts/nav.template.php"; ?>
@@ -23,14 +27,17 @@
                         </div>
                     </div>
                     <div class="row">
-                        <?php for ($i=0; $i < 12; $i++): ?>
+                        <?php foreach($prods as $prod): ?>
                         <div class="col-md-3 p-2">
                             <div class="card" style="width: 18rem;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/768px-Bootstrap_logo.svg.png" class="card-img-top" alt="...">
+                                <img src="<?php echo $prod["cover"]; ?>" class="card-img-top" width="100" height="250" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <h5 class="card-title"><?php echo $prod["name"]; ?></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <?php reset($prod["tags"]); 
+                                        echo $prod["tags"][key($prod["tags"])]["name"]; ?>
+                                    </h6>
+                                    <p class="card-text"><?php echo $prod["description"]; ?></p>
                                     <div class="row">
                                         <a href="#" class="btn btn-warning col-md-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</a>
                                         <a href="#" class="btn btn-danger col-md-6" onclick="remove(this)">Eliminar</a>
@@ -41,7 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
                     </div>
 
                     <!-- Modal -->
