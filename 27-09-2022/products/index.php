@@ -1,11 +1,11 @@
 <html lang="en" dir="ltr">
     <head>
         <?php include  "./../layouts/head.template.php"; ?>
-        <?php include "../app/AuthController.php"; ?>
+        <?php include "../app/ProductController.php"; ?>
     </head>
     <body>
         <?php session_start();
-        $prodController = new AuthController();
+        $prodController = new ProductController();
         $prods = $prodController->getProducts(); ?>
 
         <!-- navbar -->
