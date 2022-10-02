@@ -33,8 +33,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title"><?php echo $prod["name"]; ?></h5>
                                     <h6 class="card-subtitle mb-2 text-muted">
-                                        <?php reset($prod["tags"]); 
-                                        echo $prod["tags"][key($prod["tags"])]["name"]; ?>
+                                        <?php if(isset($prod["tags"])){
+                                            reset($prod["tags"]); 
+                                            if(isset($prod["tags"][key($prod["tags"])]["name"]))
+                                                echo $prod["tags"][key($prod["tags"])]["name"]; 
+                                        } ?>
                                     </h6>
                                     <p class="card-text"><?php echo $prod["description"]; ?></p>
                                     <div class="row">
@@ -58,7 +61,7 @@
                                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form action="../app/ProductController.php" method="POST">
+                                <form action="../app/ProductController.php" method="POST" id="setForm" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
@@ -70,19 +73,21 @@
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripción" aria-label="Username" aria-describedby="basic-addon1">
+                                            <!--<input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripción" aria-label="Username" aria-describedby="basic-addon1">-->
+                                            <textarea form ="setForm" name="description" id="description" class="form-control" placeholder="Descripción" cols="35" wrap="soft"></textarea>
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="text" id="features" name="features" class="form-control" placeholder="Features" aria-label="Username" aria-describedby="basic-addon1">
+                                            <!--<input type="text" id="features" name="features" class="form-control" placeholder="Features" aria-label="Username" aria-describedby="basic-addon1">-->
+                                            <textarea form ="setForm" name="features" id="features" class="form-control" placeholder="Features" cols="35" wrap="soft"></textarea>
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="text" id="brand" name="brand" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
+                                            <input type="text" id="brand_id" name="brand_id" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="text" id="cover" name="cover" class="form-control" placeholder="Cover" aria-label="Username" aria-describedby="basic-addon1">
+                                            <input type="file" id="cover" name="cover" class="form-control" accept="image/*" aria-label="Username" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
