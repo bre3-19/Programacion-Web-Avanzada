@@ -2,10 +2,13 @@
     <head>
         <?php include  "./../layouts/head.template.php"; ?>
         <?php include "../app/ProductController.php"; ?>
+        <?php include "../app/BrandController.php"; ?>
     </head>
     <body>
         <?php $prodController = new ProductController();
-        $prods = $prodController->getProducts(); ?>
+        $prods = $prodController->getProducts();
+        $brandController = new BrandController();
+        $brands = $brandController->getBrands(); ?>
 
         <!-- navbar -->
         <?php include "./../layouts/nav.template.php"; ?>
@@ -83,11 +86,17 @@
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="text" id="brand_id" name="brand_id" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
+                                            <!--<input type="text" id="brand_id" name="brand_id" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">-->
+                                            <select id="brand_id" name="brand_id" class="form-control"aria-label="Username" aria-describedby="basic-addon1">
+                                                <option value="" selected disabled hidden> Seleccione una Brand </option>
+                                                <?php foreach($brands as $brand): ?>
+                                                    <option value="<?php echo $brand["id"] ?>"> <?php echo $brand["name"] ?> </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
-                                            <input type="file" id="cover" name="cover" class="form-control" accept="image/*" aria-label="Username" aria-describedby="basic-addon1">
+                                            <input type="file" id="cover" name="cover" class="form-control" accept="image/*" data-max-size="1920000" aria-label="Username" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
