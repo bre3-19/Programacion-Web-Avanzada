@@ -1,12 +1,25 @@
 <html lang="en" dir="ltr">
     <head>
         <?php include "./../layouts/head.template.php"; ?>
+        <?php include "../app/ProductController.php"; ?>
     </head>
 
     <body>
+        <?php $prodController = new ProductController();
+        $prods = $prodController->getProducts();
+        if(isset($_GET["slug"])) {
+            foreach($prods as $prod) {
+                if($prod["slug"] == $_GET["slug"]) {
+                    $prod = $prodController->getProduct($prod['id']);
+                    break;
+                }
+            }
+        } else {
+            header('Location: index.php?error=true');
+        }?>
 
         <!-- navbar -->
-        <?php include "./../layouts/navbar.template.php"; ?>
+        <?php include "./../layouts/nav.template.php"; ?>
         <div class="container-fluid">
             <div class="row">
 
@@ -17,7 +30,7 @@
                 <div class="col-lg-10 col-sm-12">
                     <div class="row m-2 border-bottom">
                         <div class="col">
-                            <span>Productos</span>
+                            <span>Detalle <?php echo $prod["name"] ?></span>
                         </div>
                         <div class="col">
                             <button class="btn btn-info float-end mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" name="button">Añadir producto</button>
@@ -27,11 +40,35 @@
                     <div class="row">
                         <div class="col-md-3 p-2">
                             <div class="card" style="width: 18rem;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2048px-Tailwind_CSS_Logo.svg.png" class="card-img-top" alt="...">
+                                <img src=<?php echo $prod["cover"]?> class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <h5 class="card-title"><?php echo $prod["name"]; ?></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <p class="card-text"><?php echo $prod["description"]; ?></p>
+                                        <p>Brand: 
+                                        <?php if(isset($prod['brand'])) {
+                                            echo $prod['brand']['name'];
+                                        } else
+                                            echo "No Brand"; ?></p>
+
+                                        <p>Categories: 
+                                        <?php $catArray = array();
+                                        if(isset($prod['categories'])) {
+                                            foreach($prod['categories'] as $cat)
+                                                array_push($catArray, $cat['name']);
+                                            echo implode( ', ', $catArray ); 
+                                        } else
+                                            echo "No categories"; ?></p>
+
+                                        <p>Tags: 
+                                        <?php $tagArray = array();
+                                        if(isset($prod['tags'])) {
+                                            foreach($prod['tags'] as $tag)
+                                                array_push($tagArray, $tag['name']);
+                                            echo implode( ', ', $tagArray );
+                                        } else
+                                            echo "No tags"; ?></p>
+                                    </h6>
                                     <div class="row">
                                         <a href="#" class="btn btn-warning col-md-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</a>
                                         <a href="#" class="btn btn-danger col-md-6" onclick="remove(this)">Eliminar</a>

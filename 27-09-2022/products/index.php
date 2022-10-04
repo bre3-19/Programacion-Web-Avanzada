@@ -1,6 +1,6 @@
 <html lang="en" dir="ltr">
     <head>
-        <?php include  "./../layouts/head.template.php"; ?>
+        <?php include "./../layouts/head.template.php"; ?>
         <?php include "../app/ProductController.php"; ?>
         <?php include "../app/BrandController.php"; ?>
     </head>
@@ -36,11 +36,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title"><?php echo $prod["name"]; ?></h5>
                                     <h6 class="card-subtitle mb-2 text-muted">
-                                        <?php if(isset($prod["tags"])){
-                                            reset($prod["tags"]); 
-                                            if(isset($prod["tags"][key($prod["tags"])]["name"]))
-                                                echo $prod["tags"][key($prod["tags"])]["name"]; 
-                                        } ?>
+                                    <?php if(isset($prod['brand'])) {
+                                        echo $prod['brand']['name'];
+                                    } else
+                                        echo "No Brand"; ?>
                                     </h6>
                                     <p class="card-text"><?php echo $prod["description"]; ?></p>
                                     <div class="row">
@@ -48,7 +47,7 @@
                                         <a href="#" class="btn btn-danger col-md-6" onclick="remove(this)">Eliminar</a>
                                     </div>
                                     <div class="row">
-                                        <a href="./detalles.php" class="btn btn-info col-md-12">Detalles</a>
+                                        <a href="./detalles.php?<?php echo "slug=", $prod["slug"]?>" class="btn btn-info col-md-12">Detalles</a>
                                     </div>
                                 </div>
                             </div>
