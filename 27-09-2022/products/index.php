@@ -25,7 +25,7 @@
                             <span>Productos</span>
                         </div>
                         <div class="col">
-                            <button class="btn btn-info float-end mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" name="button">Añadir producto</button>
+                            <button class="btn btn-info float-end mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" name="button" onclick='add()'>Añadir producto</button>
                         </div>
                     </div>
                     <div class="row">
@@ -43,8 +43,8 @@
                                     </h6>
                                     <p class="card-text"><?php echo $prod["description"]; ?></p>
                                     <div class="row">
-                                        <a href="#" class="btn btn-warning col-md-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</a>
-                                        <a href="#" class="btn btn-danger col-md-6" onclick="remove(this)">Eliminar</a>
+                                        <a href="#" data-product='<?php echo json_encode($prod)?>' class="btn btn-warning col-md-6" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='edit(this)'>Editar</a>
+                                        <a href="#" class="btn btn-danger col-md-6" onclick="remove(<?= $prod['id']?>)">Eliminar</a>
                                     </div>
                                     <div class="row">
                                         <a href="./detalles.php?<?php echo "slug=", $prod["slug"]?>" class="btn btn-info col-md-12">Detalles</a>
@@ -99,7 +99,8 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <input type="hidden" name="action" value="create">
+                                        <input type="hidden" name="id" id="id" value="">
+                                        <input type="hidden" id="action" name="action" value="create">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                     </div>
@@ -113,7 +114,26 @@
         <?php include "./../layouts/scripts.template.php"; ?>
 
         <script type="text/javascript">
-        function remove(target){
+        function add() {
+            document.getElementById('exampleModalLabel').innerText = 'Agregar producto';
+            document.getElementById('action').value = "create";
+        }
+
+        function edit(target) {
+            document.getElementById('exampleModalLabel').innerText = 'Editar producto';
+            document.getElementById('action').value = "edit";
+
+            const prod = JSON.parse(target.getAttribute('data-product'));
+
+            document.getElementById('name').value = prod.name;
+            document.getElementById('slug').value = prod.slug;
+            document.getElementById('description').value = prod.description;
+            document.getElementById('features').value = prod.features;
+            document.getElementById('brand_id').value = prod.brand_id;
+            document.getElementById('id').value = prod.id;
+        }
+
+        function remove(target) {
             swal({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -123,9 +143,13 @@
             })
             .then((willDelete) => {
                 if (willDelete) {
-                    swal("Poof! Your imaginary file has been deleted!", {
-                    icon: "success",
-                    });
+                    let data = new FormData();
+                    data.append("id", id);
+                    data.append("action", "delete");
+                    axios.post('../app/ProductController.php', data)
+                    .then(function (response) {
+                        location.reload();
+                    })
                 } else {
                     swal("Your imaginary file is safe!");
                 }
