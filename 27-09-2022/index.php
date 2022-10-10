@@ -14,7 +14,7 @@
             <div class="flex h-screen justify-center items-center">
                 <div class="">
                     <div class="">
-                        <form class="" action="./app/AuthController.php" method="post">
+                        <form class="" action="auth" method="post">
                             <div class="mb-6 flex justify-center ">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/768px-Bootstrap_logo.svg.png" style="width: 8rem;" class="w-full" alt="Tailwind Logo"/>
                             </div>
