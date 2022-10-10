@@ -5,7 +5,8 @@
         <?php include "../app/BrandController.php"; ?>
     </head>
     <body>
-        <?php $prodController = new ProductController();
+        <?php include_once "../app/config.php";
+        $prodController = new ProductController();
         $prods = $prodController->getProducts();
         $brandController = new BrandController();
         $brands = $brandController->getBrands(); ?>
@@ -99,6 +100,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
+                                        <input type="hidden" name="global_token" value="<?php echo $_SESSION['global_token']?>">
                                         <input type="hidden" name="id" id="id" value="">
                                         <input type="hidden" id="action" name="action" value="create">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -133,7 +135,7 @@
             document.getElementById('id').value = prod.id;
         }
 
-        function remove(target) {
+        function remove(id) {
             swal({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -146,6 +148,7 @@
                     let data = new FormData();
                     data.append("id", id);
                     data.append("action", "delete");
+                    data.append("global_token", '<?php echo $_SESSION["global_token"] ?>');
                     axios.post('../app/ProductController.php', data)
                     .then(function (response) {
                         location.reload();
