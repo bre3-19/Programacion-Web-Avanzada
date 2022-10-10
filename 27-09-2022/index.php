@@ -9,6 +9,7 @@
     </head>
     
     <body>
+        <?php include_once "./app/config.php"; ?>
         <section class="h-screen">
             <div class="flex h-screen justify-center items-center">
                 <div class="">
@@ -27,6 +28,7 @@
                                 Acceder
                             </button>
                             <input type="hidden" name="action" value="access">
+                            <input type="hidden" name="global_token" value="<?php echo $_SESSION['global_token']?>">
                         </form>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once "config.php";
 
 if(isset($_POST["action"])){
     $name = strip_tags($_POST["name"]);
@@ -40,8 +40,7 @@ class ProductController {
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'GET',
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['token'].'',
-            'Cookie: XSRF-TOKEN=eyJpdiI6IlFMSFRaYkZrdlVkdklaNmdSNVlFRWc9PSIsInZhbHVlIjoiZHJHelhnUU9IRFRZQ2hva3dqNVRxd2xqYWhUOGREQ0hScDRaekx1YkVtRWJuN29ZenZoMktyMUJuUEl2b3lsZzk0TC92NDZUNnorekE5NnY1T0VabXVYL1RianlRVk1FanpRT0g5ZmE5TE9lcFFwNTUyU2xtKzE4cElGSWFtM0ciLCJtYWMiOiI0NzZkNzI4N2UxNjYwZDJjZmQwODBkMDhmN2EzNzUxYjM1NWY0OWJlNmU5NWZmNjFjNWIyNzRhZDExYjc2OTIwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjNQN2NvVzczOElybDUxc0lONmcrSFE9PSIsInZhbHVlIjoieDlWaGduR0ZPVHhVb3Q3ZUhsbDRnVE5JbTlpSUlKaU1MejFjSGNjcTBaMFcvelhqa2VLWTZrdXhzbmE1RFBRejkvYVV5akFGdGVHVnE4R2tzYklYekc5dXN3dHdoTTF6S0pCTVhxeW9oOUQxakdHSGlobVNOSUpMMWdKM1ZQbkoiLCJtYWMiOiJkNTlkYWFjNjU1MTBlZmFkN2Q0YzhmMmFhNjlmZWFhOGJmMTIyMTdiZTAzYzJhNTYxZGExYzdiY2ZkOWVhMzU2IiwidGFnIjoiIn0%3D'
+            'Authorization: Bearer '.$_SESSION['token'].''
         ),
         ));
 
@@ -67,8 +66,7 @@ class ProductController {
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'GET',
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['token'].'',
-            'Cookie: XSRF-TOKEN=eyJpdiI6IlFMSFRaYkZrdlVkdklaNmdSNVlFRWc9PSIsInZhbHVlIjoiZHJHelhnUU9IRFRZQ2hva3dqNVRxd2xqYWhUOGREQ0hScDRaekx1YkVtRWJuN29ZenZoMktyMUJuUEl2b3lsZzk0TC92NDZUNnorekE5NnY1T0VabXVYL1RianlRVk1FanpRT0g5ZmE5TE9lcFFwNTUyU2xtKzE4cElGSWFtM0ciLCJtYWMiOiI0NzZkNzI4N2UxNjYwZDJjZmQwODBkMDhmN2EzNzUxYjM1NWY0OWJlNmU5NWZmNjFjNWIyNzRhZDExYjc2OTIwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjNQN2NvVzczOElybDUxc0lONmcrSFE9PSIsInZhbHVlIjoieDlWaGduR0ZPVHhVb3Q3ZUhsbDRnVE5JbTlpSUlKaU1MejFjSGNjcTBaMFcvelhqa2VLWTZrdXhzbmE1RFBRejkvYVV5akFGdGVHVnE4R2tzYklYekc5dXN3dHdoTTF6S0pCTVhxeW9oOUQxakdHSGlobVNOSUpMMWdKM1ZQbkoiLCJtYWMiOiJkNTlkYWFjNjU1MTBlZmFkN2Q0YzhmMmFhNjlmZWFhOGJmMTIyMTdiZTAzYzJhNTYxZGExYzdiY2ZkOWVhMzU2IiwidGFnIjoiIn0%3D'
+            'Authorization: Bearer '.$_SESSION['token'].''
         ),
         ));
 
@@ -99,8 +97,7 @@ class ProductController {
           CURLOPT_CUSTOMREQUEST => 'POST',
           CURLOPT_POSTFIELDS => array('name' => $name,'slug' => $slug,'description' => $description,'features' => $features,'brand_id' => $brand_id, 'cover' => new CURLFILE($image)),
           CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['token'].'',
-            'Cookie: XSRF-TOKEN=eyJpdiI6IlFMSFRaYkZrdlVkdklaNmdSNVlFRWc9PSIsInZhbHVlIjoiZHJHelhnUU9IRFRZQ2hva3dqNVRxd2xqYWhUOGREQ0hScDRaekx1YkVtRWJuN29ZenZoMktyMUJuUEl2b3lsZzk0TC92NDZUNnorekE5NnY1T0VabXVYL1RianlRVk1FanpRT0g5ZmE5TE9lcFFwNTUyU2xtKzE4cElGSWFtM0ciLCJtYWMiOiI0NzZkNzI4N2UxNjYwZDJjZmQwODBkMDhmN2EzNzUxYjM1NWY0OWJlNmU5NWZmNjFjNWIyNzRhZDExYjc2OTIwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjNQN2NvVzczOElybDUxc0lONmcrSFE9PSIsInZhbHVlIjoieDlWaGduR0ZPVHhVb3Q3ZUhsbDRnVE5JbTlpSUlKaU1MejFjSGNjcTBaMFcvelhqa2VLWTZrdXhzbmE1RFBRejkvYVV5akFGdGVHVnE4R2tzYklYekc5dXN3dHdoTTF6S0pCTVhxeW9oOUQxakdHSGlobVNOSUpMMWdKM1ZQbkoiLCJtYWMiOiJkNTlkYWFjNjU1MTBlZmFkN2Q0YzhmMmFhNjlmZWFhOGJmMTIyMTdiZTAzYzJhNTYxZGExYzdiY2ZkOWVhMzU2IiwidGFnIjoiIn0%3D'
+            'Authorization: Bearer '.$_SESSION['token'].''
           ),
         ));
 
@@ -132,7 +129,6 @@ class ProductController {
           CURLOPT_HTTPHEADER => array(
             'Authorization: Bearer '.$_SESSION['token'].'',
             'Content-Type: application/x-www-form-urlencoded',
-            'Cookie: XSRF-TOKEN=eyJpdiI6IlFMSFRaYkZrdlVkdklaNmdSNVlFRWc9PSIsInZhbHVlIjoiZHJHelhnUU9IRFRZQ2hva3dqNVRxd2xqYWhUOGREQ0hScDRaekx1YkVtRWJuN29ZenZoMktyMUJuUEl2b3lsZzk0TC92NDZUNnorekE5NnY1T0VabXVYL1RianlRVk1FanpRT0g5ZmE5TE9lcFFwNTUyU2xtKzE4cElGSWFtM0ciLCJtYWMiOiI0NzZkNzI4N2UxNjYwZDJjZmQwODBkMDhmN2EzNzUxYjM1NWY0OWJlNmU5NWZmNjFjNWIyNzRhZDExYjc2OTIwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjNQN2NvVzczOElybDUxc0lONmcrSFE9PSIsInZhbHVlIjoieDlWaGduR0ZPVHhVb3Q3ZUhsbDRnVE5JbTlpSUlKaU1MejFjSGNjcTBaMFcvelhqa2VLWTZrdXhzbmE1RFBRejkvYVV5akFGdGVHVnE4R2tzYklYekc5dXN3dHdoTTF6S0pCTVhxeW9oOUQxakdHSGlobVNOSUpMMWdKM1ZQbkoiLCJtYWMiOiJkNTlkYWFjNjU1MTBlZmFkN2Q0YzhmMmFhNjlmZWFhOGJmMTIyMTdiZTAzYzJhNTYxZGExYzdiY2ZkOWVhMzU2IiwidGFnIjoiIn0%3D'
           ),
         ));
 
@@ -162,7 +158,6 @@ class ProductController {
         CURLOPT_CUSTOMREQUEST => 'DELETE',
         CURLOPT_HTTPHEADER => array(
             'Authorization: Bearer '.$_SESSION['token'].'',
-            'Cookie: XSRF-TOKEN=eyJpdiI6IlFMSFRaYkZrdlVkdklaNmdSNVlFRWc9PSIsInZhbHVlIjoiZHJHelhnUU9IRFRZQ2hva3dqNVRxd2xqYWhUOGREQ0hScDRaekx1YkVtRWJuN29ZenZoMktyMUJuUEl2b3lsZzk0TC92NDZUNnorekE5NnY1T0VabXVYL1RianlRVk1FanpRT0g5ZmE5TE9lcFFwNTUyU2xtKzE4cElGSWFtM0ciLCJtYWMiOiI0NzZkNzI4N2UxNjYwZDJjZmQwODBkMDhmN2EzNzUxYjM1NWY0OWJlNmU5NWZmNjFjNWIyNzRhZDExYjc2OTIwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjNQN2NvVzczOElybDUxc0lONmcrSFE9PSIsInZhbHVlIjoieDlWaGduR0ZPVHhVb3Q3ZUhsbDRnVE5JbTlpSUlKaU1MejFjSGNjcTBaMFcvelhqa2VLWTZrdXhzbmE1RFBRejkvYVV5akFGdGVHVnE4R2tzYklYekc5dXN3dHdoTTF6S0pCTVhxeW9oOUQxakdHSGlobVNOSUpMMWdKM1ZQbkoiLCJtYWMiOiJkNTlkYWFjNjU1MTBlZmFkN2Q0YzhmMmFhNjlmZWFhOGJmMTIyMTdiZTAzYzJhNTYxZGExYzdiY2ZkOWVhMzU2IiwidGFnIjoiIn0%3D'
         ),
         ));
 
