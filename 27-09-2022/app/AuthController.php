@@ -40,7 +40,7 @@ class AuthController {
             $_SESSION['lastname'] = $response->data->lastname;
             $_SESSION['avatar'] = $response->data->avatar;
             $_SESSION['token'] = $response->data->token;
-            header("Location:./../products/index.php");
+            header("Location:".BASE_PATH."products");
         } else{
             header("Location:../?error=true");
         }

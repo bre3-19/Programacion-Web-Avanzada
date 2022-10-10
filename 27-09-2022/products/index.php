@@ -64,7 +64,7 @@
                                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form action="../app/ProductController.php" method="POST" id="setForm" enctype="multipart/form-data">
+                                <form action="<?php echo BASE_PATH ?>prod" method="POST" id="setForm" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">@</span>
@@ -149,7 +149,7 @@
                     data.append("id", id);
                     data.append("action", "delete");
                     data.append("global_token", '<?php echo $_SESSION["global_token"] ?>');
-                    axios.post('../app/ProductController.php', data)
+                    axios.post("<?php echo BASE_PATH ?>prod", data)
                     .then(function (response) {
                         location.reload();
                     })

@@ -82,7 +82,7 @@ class ProductController {
 
     public function storeProduct($name, $slug, $description, $features, $brand_id){
         if(!isset($_FILES["cover"]) || ($_FILES["cover"]["error"] > 0)) {
-            header("Location: ../products?error=true");
+            header("Location:".BASE_PATH."/products?error=true");
         }
 
         $image = $_FILES["cover"]["tmp_name"];
@@ -109,9 +109,9 @@ class ProductController {
         // $response = json_decode($response);
         // var_dump($response);
         if($response->code == 4){
-            header("Location: ../products?success=true");
+            header("Location:".BASE_PATH."products?success=true");
         }else{
-            header("Location: ../products?error=?");
+            header("Location:".BASE_PATH."products?error=?");
         }
     }
 
@@ -140,9 +140,9 @@ class ProductController {
         $response = json_decode($response);
         // var_dump($response);
         if($response->code == 4){
-            header("Location: ../products?success=true");
+            header("Location:".BASE_PATH."/products?success=true");
         }else{
-            header("Location: ../products?error=?");
+            header("Location:".BASE_PATH."/products?error=?");
         }
     }
 
